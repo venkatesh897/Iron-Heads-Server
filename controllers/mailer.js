@@ -8,8 +8,8 @@ let nodeconfig = {
     SMTPAuth : true,
   auth: {
     // TODO: replace `user` and `pass` values from <https://forwardemail.net>
-    user: "francisco58@ethereal.email",
-    pass: "26agFFEpvMUsBJYKUv",
+    user: "madyson.morissette9@ethereal.email",
+    pass: "F1hHgv4pmKg8MEbZe5",
   },
 }
 

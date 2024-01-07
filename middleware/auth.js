@@ -12,7 +12,7 @@ export default async function Auth(req,res,next)
 
         req.user = decodetoken
 
-        res.json(decodetoken)
+        next()
 
     }
     catch(err)

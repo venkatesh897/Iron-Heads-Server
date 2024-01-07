@@ -8,6 +8,7 @@ async function connect()
     const geturi = monod.getUri()
     mongoose.set('strictQuery',true)
     const db = await mongoose.connect(geturi)
+    //const db = await mongoose.connect('mongodb+srv://venkatesh:aqwsderf3V@cluster0.tejtht6.mongodb.net/?retryWrites=true&w=majority')
     console.log("data base connect")
     return db
 

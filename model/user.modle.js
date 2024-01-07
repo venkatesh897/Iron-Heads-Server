@@ -23,7 +23,8 @@ export const UserSchema = new mongoose.Schema({
     lastName:{type:String},
     mobile:{type:Number},
     Weight:{type:Number},
-    Height:{type:Number}
+    Height:{type:Number},
+    workoutSessions:{type: Array}
 })
 
 export default mongoose.model('User',UserSchema)

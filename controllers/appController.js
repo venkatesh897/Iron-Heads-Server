@@ -181,7 +181,7 @@ export async function getUser(req,res)
         {
             if(!user)
             {
-                returnres.status(501).send({err:"user not found"})
+                return res.status(501).send({err:"user not found"})
             }
 
             const {password,...rest} = Object.assign({}, user.toJSON())
@@ -201,18 +201,51 @@ export async function getUser(req,res)
 }
 
 
+export async function getWorkSessions(req,res)
+{
+    const {username} = req.params
+    try{
+        if(!username)
+        {
+            res.status(500).send({err:"Invalid user name"})
+        }
+        userModle.findOne({username}).then(user=>
+        {
+            if(!user)
+            {
+                return res.status(501).send({err:"user not found"})
+            }
+            const {password,...rest} = Object.assign({}, user.toJSON())
+            return res.status(201).send(rest)
+
+        })
+    }
+    catch(err)
+    {
+        res.status(404).send({err:"Invalid user name"}).then((user)=>
+        {
+
+        })
+    }
+    
+}
+
+
 export async function updateUser(req,res)
 {
    try{
 
-    const {userId} = req.user
+    const { userId } = req.user;
+    console.log(userId)
 
-    if(id)
+    if(userId)
     {
         const body = req.body
+        
 
         userModle.updateOne({_id:userId},body).then(data =>
             {
+        
                 return res.status(201).send('Updated the profile')
 
             }).catch(err => res.status(500).send({err}))
@@ -224,7 +257,7 @@ export async function updateUser(req,res)
    }
    catch(err)
    {
-    res.status(401).send({err})
+    res.status(401).send({err:"Invalid user name"})
    }
 }
 
@@ -256,12 +289,15 @@ export async function createResetSession(req,res)
 {
     if(req.app.locals.resetSession )
     {
-        req.app.locals.resetSession = false;
+         
 
-        return res.status(500).send({msg:"granted"})
+        return res.status(500).send({flag:req.app.locals.resetSession})
     }
     return res.status(400).send({msg:"session expired"})
 }
+
+
+
 
 export async function resetPassword(req,res)
 {
@@ -277,7 +313,10 @@ export async function resetPassword(req,res)
             userModle.findOne({username}).then(user=>
                 {
                     bcrypt.hash(password,10).then(hashpassword => {
-                        userModle.updateOne({username:user.username},{password:hashpassword}).then(data => res.status(500).send({msd:"password changed succesffuly"})).catch(err => res.send(404).semd({err}))
+                        userModle.updateOne({username:user.username},{password:hashpassword}).then(data =>{
+                            req.app.locals.resetSession = false
+                            res.status(201).send({msd:"password changed succesffuly"
+                        })} ).catch(err => res.send(404).semd({err}))
                     }).catch(err => res.status(404).send({err:"unable to hash password"}))
                 }).catch(err => res.status(404).send({err:"username not found"}))
 
